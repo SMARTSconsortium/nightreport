@@ -131,7 +131,7 @@ def createHTML(datestart,tele):
 	#make the html page
 	fileHTML=open(str(tele)+'-m-'+datestart+'report.html','w')
 	fileHTML.write('<html>')
-	fileHTML.write('<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: left;}</style></head>')
+	fileHTML.write('<head><link rel="stylesheet" href="css/style.css" type="text/css"></head>')
 	fileHTML.write('<body><h1>SMARTS '+str(tele)+'-m Night Report Summary '+datestart+'</h1>')
 	fileHTML.write('<p><em>created on '+datetime.datetime.today().isoformat(' ')+'</em></p>')
 	fileHTML.write('<p><em>Total Nights :'+str(len(tableMonth))+'</em></p>')
@@ -158,7 +158,7 @@ def createHTML(datestart,tele):
 		parseHTMLtable(projtime,fileHTML,['Project ID','Hours'])
 		fileHTML.write('</fieldset>')
 
-		fileHTML.write('<fieldset><h3>Seeing Conditions<h3>')
+		fileHTML.write('<fieldset><h3>Seeing Conditions</h3>')
 		bonclean=np.where(tableMonth['Seeing (BON)'].__array__()!='n/a')
 		monclean=np.where(tableMonth['Seeing (Middle of Night)'].__array__()!='n/a')
 		eonclean=np.where(tableMonth['Seeing (EON)'].__array__()!='n/a')
@@ -178,7 +178,7 @@ def createHTML(datestart,tele):
 		fileHTML.write('</fieldset>')
 
 	elif tele==1.5:
-		fileHTML.write('<fieldset><h3>Seeing Conditions<h3>')
+		fileHTML.write('<fieldset><h3>Seeing Conditions</h3>')
 
 		maxseestat=columnCalc(tableMonth,'Maximum Seeing')
 		minseestat=columnCalc(tableMonth,'Minimum Seeing')
