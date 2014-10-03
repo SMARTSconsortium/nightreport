@@ -207,7 +207,7 @@ def createHTML(datestart,tele):
 	fileHTML.write('<fieldset>')
 	fileHTML.write('<h3>Weather Conditions</h3>')
 	fileHTML.write('<img src="'+str(tele)+'-m-'+datestart+'weather.png" align="left" width="500px">')
-	parseHTMLtable(weather,fileHTML,['conditions','hours'])
+	parseHTMLtable(weather,fileHTML,['conditions','freq.'])
 	fileHTML.write('</fieldset>')
 	
 	fileHTML.write('<fieldset><h3>System Failures</h3>')
