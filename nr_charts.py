@@ -31,7 +31,7 @@ def failurechart(sfsetcountdict,date,tele):
 	ax.set_xlabel('failures')
 	#ax.set_title('SMARTS 1.3 + ANDICAM System Failures')
 	ax.set_xticks(np.arange(sfnum)+(width/2))
-	ax.set_xticklabels([ticklabel[i] for i in sfsetcountdict if i !='0'])
+	ax.set_xticklabels([ticklabel[i] for i in sfsetcountdict if i in ticklabel])
 	#ax.set_xticklabels(('Dome','WC', 'IR', 'Prospero','Sync D+T', 'IC','TCS'))
 	
 	plt.savefig(str(tele)+'-m-'+date+'systemfail.png')
