@@ -10,6 +10,7 @@ Everything else is depricated, but is there just in case it becomes usefull to l
 There is another version of nr_charts.py in the ParseFomrs directory. dont use that. its depricated.
 Its from before I started using version control on this project
 
+Instructions
 ==========
 
 to use these programs on the yale astronomy department webserver, pegasus, do the following
@@ -40,4 +41,11 @@ this program looks at all the 1.3m observation logs it can find for whatever mon
 you could probably clean this all up by usings panda data frames instead of astropy tables. but that will take a lot of rewritting
 
 if you are super cool, it would be neat if the program could give warnings about immenent failurs given past night report data. ie if the dewar is being refilled constantly, it may mean it needs its vacuum restored
+
+Supporting programs
+================
+www.astro.yale.edu/smarts/nightreport/ has a nice outline of all the forms and response sheets for the report forms.
+These are owned by the user smartscas@gmail.com. The response forms have googlescripts which regulate when smartscas emails the submitted night report. 
+
+To look at the google scripts, first open up the response sheet, go to tools > script editor. They should have a trigger set such that the codes are executed when the form is submitted
 
