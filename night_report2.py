@@ -12,9 +12,9 @@ import nr_charts
 def ReadResponse(tele):
 	if tele==1.5:
 		#this long url is where the tsv response form lives
-		response=urllib2.urlopen('https://docs.google.com/spreadsheet/pub?key=0AqOsF57HNy0kdEVYaFcyaFJxQlhpdTQxQ094WXI3b3c&single=true&gid=0&output=txt')
+		response=urllib2.urlopen('https://docs.google.com/spreadsheet/pub?key=0AqOsF57HNy0kdEVYaFcyaFJxQlhpdTQxQ094WXI3b3c&single=true&gid=0&output=tsv')
 	elif tele==1.3:
-		response=urllib2.urlopen('https://docs.google.com/spreadsheet/pub?key=0AqOsF57HNy0kdFV6ME5ncnJlQWZKM0dHMW0xTlo1eVE&single=true&gid=0&output=txt')
+		response=urllib2.urlopen('https://docs.google.com/spreadsheet/pub?key=0AqOsF57HNy0kdFV6ME5ncnJlQWZKM0dHMW0xTlo1eVE&single=true&gid=0&output=tsv')
 	rSheet=response.read()
 	rTable=ascii.read(rSheet)
 	return rTable
