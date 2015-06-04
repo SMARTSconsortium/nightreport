@@ -16,16 +16,24 @@ Instructions
 to use these programs on the yale astronomy department webserver, pegasus, do the following
 
 1) ssh as yourself to pegasus
-	$ ssh user@pegasus.astro.yale.edu
+```shell
+$ ssh user@pegasus.astro.yale.edu
+```
 
 2) swap user to yalo. You will be prompted for a password
-	$ su yalo
+```shell
+su yalo
+```
 
 3) change directory to the nightreport directory
-	> cd /var/www/html/smarts/nightreport
+```shell
+cd /var/www/html/smarts/nightreport
+```
 
 4) use anaconda distribution of python to run night report script, and provide the telescope and start date. eg
-	> /opt/anaconda/bin/python night_report2.py 150101 1.3
+```shell
+/opt/anaconda/bin/python night_report2.py 150101 1.3
+```
 will run the night report program from jan 01 - jan 31 2015 using data from the 1.3m response sheet. the end date for the month is computed in the program. for example, it knows january has 31 days and feb has 28.
 
 this will create a few files, an html page of the form 1.3-m-yymmddreport.html or 1.5-m-yymmddreport.html-depending on the telescope-and several png files that visualize the data from the form
@@ -35,6 +43,7 @@ it would be cool if someone added a feature here so the index.html page updates 
 
 Suggested Improvements
 ====================
+add a feature so that the index.html page updates itself after the night report program is executed, so that new pages are linked automatically
 
 this program looks at all the 1.3m observation logs it can find for whatever month it is reducing so it can tally up the ammount of time used by program. andicam has problems where it doesnt write out header info for targets sometimes. this will cause the entire program to crash
 
