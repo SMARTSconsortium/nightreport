@@ -230,6 +230,7 @@ def makeHome():
 	home.write('<body>\n')
 	home.write('<h1>SMARTS Night Report System</h1>\n')
 	home.write('<div id="container">\n')
+	home.write('<img src="images/observing.jpg">')
 	home.write("<h3>Observer's Night Report Forms</h3>\n<a href='http://bit.ly/SMARTS13mEONform'>SMARTS 1.3m</a>\n<a href='http://bit.ly/SMARTS15mEONform'>SMARTS 1.5m</a>\n")
 	home.write('<h3>Night Report Responses</h3>\n<a href="http://bit.ly/SMARTS13mresponse">SMARTS 1.3m</a>\n<a href="http://bit.ly/SMARTS15mresponse">SMARTS 1.5m</a>\n')
 	home.write("<h3>Observer's Trouble Report Forms</h3>\n<a href='https://docs.google.com/forms/d/1M59YLZVds8-pKGljzN2nub_WSySj8qGkkACBvHP6sFI/viewform'>SMARTS 1.3m</a>\n<a href='https://docs.google.com/forms/d/1IrpJ6Xedz9x4345J6jdaTJNxbCr-FG30dzUWyFYbfxc/viewform'>SMARTS 1.5m</a>\n")
