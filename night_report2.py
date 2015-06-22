@@ -79,14 +79,17 @@ def tallyascii(datestart):
 		table=logapi(str(i))
 		if table.empty is not True:
 			index=0
-			while index < len(table)-1:
+			j=index+1
+			while j < len(table)-1:
 				projectnow=table['Project'][index]
 				timenow=table['JD'][index]
 				targetnow=table['Object'][index]
-				while table['Project'][index] == projectnow and index < len(table)-1 and table['Object'][index] == targetnow:
-					timenext=table['JD'][index]
-					expnext=table['ExpTime'][index]
-					index=index+1
+				timenext=table['JD'][j]
+				expnext=table['ExpTime'][j]
+				while table['Project'][j] == projectnow and j < len(table)-1 and table['Object'][j] == targetnow:
+					timenext=table['JD'][j]
+					expnext=table['ExpTime'][j]
+					j=j+1
 				elapsed=(timenext-timenow)*86400 + expnext
 				try:
 					projdict[projectnow]["nexp"]+=1
@@ -96,6 +99,8 @@ def tallyascii(datestart):
 						projdict[projectnow]={"nexp":1, "time":elapsed}
 					else:
 						pass
+				index=j
+				j+=1
 		else:
 			noObs+=1
 	return [projdict,noObs]
