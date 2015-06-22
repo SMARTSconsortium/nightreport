@@ -64,6 +64,7 @@ def logapi(datestart):
 
 	try:
 		log=pd.io.parsers.read_fwf(request)
+		log.Project=log.Project.replace(np.nan, 'ALL')
 		return log
 	except urllib2.HTTPError, e:
 		print request+" not found"
@@ -84,13 +85,9 @@ def tallyascii(datestart):
 				projectnow=table['Project'][index]
 				timenow=table['JD'][index]
 				targetnow=table['Object'][index]
-				timenext=table['JD'][j]
-				expnext=table['ExpTime'][j]
 				while table['Project'][j] == projectnow and j < len(table)-1 and table['Object'][j] == targetnow:
-					timenext=table['JD'][j]
-					expnext=table['ExpTime'][j]
 					j=j+1
-				elapsed=(timenext-timenow)*86400 + expnext
+				elapsed=(table['JD'][j-1]-timenow)*86400 + table['ExpTime'][j-1]
 				try:
 					projdict[projectnow]["nexp"]+=1
 					projdict[projectnow]["time"]+=elapsed
@@ -146,7 +143,7 @@ def createHTML(datestart,tele):
 		fileHTML.write('<fieldset><h3>Observing Conditions</h3>')
 		cond=countUniq(tableMonth,'Program used')
 		nr_charts.condpie(cond,datestart)
-		fileHTML.write('<img src="'+datestart+'conditions.png" align="left" width="500px">')
+		fileHTML.write('<img src="images/'+datestart+'conditions.png" align="left" width="500px">')
 		parseHTMLtable(cond,fileHTML,['Program Used','Total'])
 		fileHTML.write('</fieldset>')
 
@@ -155,7 +152,7 @@ def createHTML(datestart,tele):
 		for key in projdict:
 			projtime[key]=np.around(projdict[key]['time']/3600, decimals=1)
 		nr_charts.breakdownpie(projdict,datestart)
-		fileHTML.write('<img src="'+datestart+'breakdown.png" align="left" width="500px">')
+		fileHTML.write('<img src="images/'+datestart+'breakdown.png" align="left" width="500px">')
 		parseHTMLtable(projtime,fileHTML,['Project ID','Hours'])
 		fileHTML.write('</fieldset>')
 
@@ -170,7 +167,7 @@ def createHTML(datestart,tele):
 		nr_charts.seeingtime(times,[tableMonth['Seeing (BON)'],tableMonth['Seeing (Middle of Night)'],tableMonth['Seeing (EON)']],
 			[bonclean,monclean,eonclean],datestart,tele)
 
-		fileHTML.write('<img src="'+str(tele)+'-m-'+datestart+'seeing.png" align="left" width="500px">')
+		fileHTML.write('<img src="images/'+str(tele)+'-m-'+datestart+'seeing.png" align="left" width="500px">')
 		parseHTMLtable(bonseestat,fileHTML,['BON Statistic','Seeing Value'])
 		fileHTML.write('<br><br>')
 		parseHTMLtable(monseestat,fileHTML,['MON Statistic','Seeing Value'])
@@ -192,7 +189,7 @@ def createHTML(datestart,tele):
 		nr_charts.seeingtime(times,[tableMonth['Maximum Seeing'],tableMonth['Minimum Seeing']],
 			[maxsclean,minsclean],datestart,tele)
 
-		fileHTML.write('<img src="'+str(tele)+'-m-'+datestart+'seeing.png" align="left" width="500px">')
+		fileHTML.write('<img src="images/'+str(tele)+'-m-'+datestart+'seeing.png" align="left" width="500px">')
 
 		parseHTMLtable(maxseestat,fileHTML,['BON Statistic','Seeing Value'])
 		fileHTML.write('<br><br>')
@@ -201,23 +198,23 @@ def createHTML(datestart,tele):
 		fileHTML.write('</fieldset>')
 
 	fileHTML.write('<fieldset><h3>Time Loss & Observing</h3>')
-	fileHTML.write('<img src="'+str(tele)+'-m-'+datestart+'hours.png" align="left" width="500px">')
+	fileHTML.write('<img src="images/'+str(tele)+'-m-'+datestart+'hours.png" align="left" width="500px">')
 	parseHTMLtable(hours,fileHTML,['task','hours'])
 	fileHTML.write('</fieldset>')
 
 	fileHTML.write('<fieldset>')
 	fileHTML.write('<h3>Weather Conditions</h3>')
-	fileHTML.write('<img src="'+str(tele)+'-m-'+datestart+'weather.png" align="left" width="500px">')
+	fileHTML.write('<img src="images/'+str(tele)+'-m-'+datestart+'weather.png" align="left" width="500px">')
 	parseHTMLtable(weather,fileHTML,['conditions','freq.'])
 	fileHTML.write('</fieldset>')
 	
 	fileHTML.write('<fieldset><h3>System Failures</h3>')
-	fileHTML.write('<img src="'+str(tele)+'-m-'+datestart+'systemfail.png" align="left" width="500px">')
+	fileHTML.write('<img src="images/'+str(tele)+'-m-'+datestart+'systemfail.png" align="left" width="500px">')
 	parseHTMLtable(sysfail,fileHTML,['failure','freq.'])
 	fileHTML.write('</fieldset>')
 	
 	fileHTML.write('<fieldset><h3>Night Disposition</h3>')
-	fileHTML.write('<img src="'+str(tele)+'-m-'+datestart+'disposition.png" align="left" width="500px">')
+	fileHTML.write('<img src="images/'+str(tele)+'-m-'+datestart+'disposition.png" align="left" width="500px">')
 	parseHTMLtable(disposition,fileHTML,['Disposition','freq.'])
 	fileHTML.write('</fieldset>')
 
