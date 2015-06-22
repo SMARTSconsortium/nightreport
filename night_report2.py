@@ -2,7 +2,7 @@
 #this is a more cleanly written version of the night report
 #it will use some more librarys to make things easier
 #it will also have an easy execution from the command line
-import urllib2, sys, datetime, calendar, itertools
+import urllib2, sys, datetime, calendar, itertools, glob
 from astropy.io import ascii
 import pandas as pd
 import numpy as np
@@ -222,7 +222,28 @@ def createHTML(datestart,tele):
 	fileHTML.close()
 	return
 
+def makeHome():
+	home=open('index.html','w')
+	pages=sorted(glob.glob('1.*.html'))
+
+	home.write('<html>\n<head>\n<link rel="stylesheet" href="css/style.css" type="text/css">\n<title>SMARTS Night Report</title>\n</head>\n')
+	home.write('<body>\n')
+	home.write('<h1>SMARTS Night Report System</h1>\n')
+	home.write('<div id="container">\n')
+	home.write("<h3>Observer's Night Report Forms</h3>\n<a href='http://bit.ly/SMARTS13mEONform'>SMARTS 1.3m</a>\n<a href='http://bit.ly/SMARTS15mEONform'>SMARTS 1.5m</a>\n")
+	home.write('<h3>Night Report Responses</h3>\n<a href="http://bit.ly/SMARTS13mresponse">SMARTS 1.3m</a>\n<a href="http://bit.ly/SMARTS15mresponse">SMARTS 1.5m</a>\n')
+	home.write("<h3>Observer's Trouble Report Forms</h3>\n<a href='https://docs.google.com/forms/d/1M59YLZVds8-pKGljzN2nub_WSySj8qGkkACBvHP6sFI/viewform'>SMARTS 1.3m</a>\n<a href='https://docs.google.com/forms/d/1IrpJ6Xedz9x4345J6jdaTJNxbCr-FG30dzUWyFYbfxc/viewform'>SMARTS 1.5m</a>\n")
+	home.write('<h3>Trouble Report Responses</h3>\n<a href="https://docs.google.com/spreadsheets/d/1oYMZaFaVjWjGnXSCAMXCJR72qoIw2abCrIJqf19zGdQ/pubhtml">SMARTS 1.3m</a>\n<a href="https://docs.google.com/spreadsheets/d/1c1eF9zeZEW5DRBTYNd6oMDeg_EQgdmwfCByo59yrbUM/pubhtml?gid=791702439&single=true">SMARTS 1.5m</a>\n')
+	home.write('<h3>Monthly Summaries</h3>\n<table>\n<tr><th>SMARTS 1.3-m</th><th>SMARTS 1.5-m</th></tr>\n')
+	for i in range(0,len(pages)/2):
+		home.write('<tr><td><a href="'+pages[i]+'">'+pages[i][6:12]+'</a></td><td><a href="'+pages[len(pages)/2 + i]+'">'+pages[len(pages)/2 + i][6:12]+'</a></td></tr>\n') 
+
+	home.write('</table>\n</div>\n</body>\n</html>')
+	return
 
 if __name__ =='__main__':
+	print('making 1.5-m page for '+sys.argv[1])
 	createHTML(str(sys.argv[1]), 1.5)
+	print('making 1.3-m page for '+sys.argv[1])
 	createHTML(str(sys.argv[1]), 1.3)
+	makeHome()
