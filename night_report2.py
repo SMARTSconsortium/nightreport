@@ -227,4 +227,5 @@ def createHTML(datestart,tele):
 
 
 if __name__ =='__main__':
-	createHTML(str(sys.argv[1]), float(sys.argv[2]))
+	createHTML(str(sys.argv[1]), 1.5)
+	createHTML(str(sys.argv[1]), 1.3)
