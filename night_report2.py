@@ -4,6 +4,7 @@
 #it will also have an easy execution from the command line
 import urllib2, sys, datetime, calendar, itertools
 from astropy.io import ascii
+import pandas as pd
 import numpy as np
 import nr_charts
 
@@ -62,12 +63,11 @@ def logapi(datestart):
 	request=urlroot+year+"/"+calendar[month]+"/"+'20'+datestart+".log"
 
 	try:
-		response=urllib2.urlopen(request)
-		log=response.readlines()
+		log=pd.io.parsers.read_fwf(request)
 		return log
-	except urllib2.URLError, e:
+	except urllib2.HTTPError, e:
 		print request+" not found"
-		return 0
+		return pd.DataFrame()
 
 def tallyascii(datestart):
 	projdict={}
@@ -76,21 +76,20 @@ def tallyascii(datestart):
 	#figure out how many days there are in the month being processed
 	monthLength=calendar.monthrange(2000+int(datestart[0:2]),int(datestart[2:4]))[1]
 	for i in np.arange(int(datestart),int(datestart)+monthLength):
-		log=logapi(str(i))
-		if log !=0:
-			#this is a really hacky way of adding delimiters into the header
-			#its necessary to do this to help ascii read the file properly
-			log[0]= log[0].replace(' Im', '|Im').replace(' Ob','|Ob').replace(' Exp','|Exp').replace(' Fil','|Fil').replace(' LS','|LS').replace(' UT','|UT').replace(' JD','|JD').replace(' Fil','|Fil').replace(' [L','|[L')
-			table=ascii.read(log, format='fixed_width',delimiter="|")
+		table=logapi(str(i))
+		if table.empty is not True:
 			index=0
-			while index < len(table)-1:
+			j=index+1
+			while j < len(table)-1:
 				projectnow=table['Project'][index]
 				timenow=table['JD'][index]
 				targetnow=table['Object'][index]
-				while table['Project'][index] == projectnow and index < len(table)-1 and table['Object'][index] == targetnow:
-					timenext=table['JD'][index]
-					expnext=table['ExpTime'][index]
-					index=index+1
+				timenext=table['JD'][j]
+				expnext=table['ExpTime'][j]
+				while table['Project'][j] == projectnow and j < len(table)-1 and table['Object'][j] == targetnow:
+					timenext=table['JD'][j]
+					expnext=table['ExpTime'][j]
+					j=j+1
 				elapsed=(timenext-timenow)*86400 + expnext
 				try:
 					projdict[projectnow]["nexp"]+=1
@@ -100,6 +99,8 @@ def tallyascii(datestart):
 						projdict[projectnow]={"nexp":1, "time":elapsed}
 					else:
 						pass
+				index=j
+				j+=1
 		else:
 			noObs+=1
 	return [projdict,noObs]
