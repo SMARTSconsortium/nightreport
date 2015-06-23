@@ -34,7 +34,7 @@ def failurechart(sfsetcountdict,date,tele):
 	ax.set_xticklabels([ticklabel[i] for i in sfsetcountdict if i in ticklabel])
 	#ax.set_xticklabels(('Dome','WC', 'IR', 'Prospero','Sync D+T', 'IC','TCS'))
 	
-	plt.savefig(str(tele)+'-m-'+date+'systemfail.png')
+	plt.savefig('images/'+str(tele)+'-m-'+date+'systemfail.png')
 	plt.close()
 	return
 
@@ -60,7 +60,7 @@ def weatherchart(wsetcountdict,date,tele):
 	for tick in ax.xaxis.get_major_ticks():
         	tick.label.set_fontsize(10) 
 	
-	plt.savefig(str(tele)+'-m-'+date+'weather.png')
+	plt.savefig('images/'+str(tele)+'-m-'+date+'weather.png')
 	plt.close()
 	return
 
@@ -84,7 +84,7 @@ def dispositionchart(dissetcountdict,date,tele):
 	ax.set_xticks(np.arange(disnum)+(width/2))
 	ax.set_xticklabels(("minor technical prob.","major technical prob.","everything worked well"))
 	
-	plt.savefig(str(tele)+'-m-'+date+'disposition.png')
+	plt.savefig('images/'+str(tele)+'-m-'+date+'disposition.png')
 	plt.close()
 	return
 
@@ -106,7 +106,7 @@ def seeingtime(times,seeing,mask,date,tele):
 
 	fig.autofmt_xdate()
 
-	plt.savefig(str(tele)+'-m-'+date+'seeing.png')
+	plt.savefig('images/'+str(tele)+'-m-'+date+'seeing.png')
 	plt.close()
 	return
 
@@ -121,7 +121,7 @@ def timepie(hours,date,tele):
 
 	pylab.pie(time, labels=labels, autopct='%1.1f%%', pctdistance=1.15, labeldistance= 1.3, startangle=90, explode=explode)
 	#pylab.title("Time Breakdown", bbox={'pad':10})
-	pylab.savefig(str(tele)+'-m-'+date+'hours.png')
+	pylab.savefig('images/'+str(tele)+'-m-'+date+'hours.png')
 	plt.close()
 	return
 
@@ -135,7 +135,7 @@ def condpie(condsetcountdict,date):
 
 	pylab.pie(values,labels=labels, autopct='%1.1f%%', explode=explode, startangle=90)
 	#pylab.title("Observing Conditions")
-	pylab.savefig(date+'conditions.png')
+	pylab.savefig('images/'+date+'conditions.png')
 	plt.close()
 	return
 
@@ -170,6 +170,6 @@ def breakdownpie(projdict,datestart):
 
 	pylab.pie(values,labels=labels, autopct='%1.1f%%', explode=explode, startangle=90,  pctdistance=1.15, labeldistance= 1.3)
 
-	pylab.savefig(datestart+'breakdown.png')
+	pylab.savefig('images/'+datestart+'breakdown.png')
 	plt.close()
 	return
