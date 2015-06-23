@@ -45,6 +45,7 @@ Making Specific Pages Individualy
 If you want to recreate a particular page for one telescope with out re-writing the home page or anything like that, follow the instructions below
 
 1) navigate to /var/www/htm/smarts/nightreport as yalo on pegasus. (see above for greater detail)
+
 2) start up an anaconda python instance by typing the following at your prompt
 ```shell
 /opt/anaconda/bin/python
@@ -63,7 +64,7 @@ will create 1.5-m-150301report.html
 
 Suggested Improvements
 ====================
-this program looks at all the 1.3m observation logs it can find for whatever month it is reducing so it can tally up the ammount of time used by program. andicam has problems where it doesnt write out header info for targets sometimes. this will cause the entire program to crash
+this program looks at all the 1.3m observation logs it can find for whatever month it is reducing so it can tally up the ammount of time used by program. andicam has problems where it doesnt write out header info for targets sometimes. this will cause the entire program to crash. 
 
 you could probably clean this all up by usings panda data frames instead of astropy tables. but that will take a lot of rewritting
 
