@@ -62,7 +62,7 @@ night_report2.createHTML(150301, 1.5)
 ```
 will create 1.5-m-150301report.html
 
-Suggested Improvements/Know Problems
+Suggested Improvements/Known Problems
 ====================
 andicam has problems where it doesnt write out header info for targets sometimes, or writes incorrect information. This is particularly a problem for the JD column in the andicam logs. occasionally the JD of an observation will be written as 000.00, or will be an order of magnitude too small. The tallyascii function looks at the JD's of observations to determine for how long the telescope pointed at a target. Bad JD values can lead to nonsensicle negative observation times for projects. See YALE-08A-0001 for 1.3-m-150601report.html under the Science Observation Break Down section for an example, it has -53075000 hours of observing. 
 
