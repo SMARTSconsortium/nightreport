@@ -4,6 +4,7 @@
 #it will also have an easy execution from the command line
 import urllib2, sys, datetime, calendar, itertools, glob
 from astropy.io import ascii
+from astropy.time import Time
 import pandas as pd
 import numpy as np
 import nr_charts
@@ -62,8 +63,13 @@ def logapi(datestart):
 	
 	request=urlroot+year+"/"+calendar[month]+"/"+'20'+datestart+".log"
 
+	startJD=Time(datetime.datetime(2000+int(datestart[0:2]),int(datestart[2:4]),int(datestart[4:])),scale='utc').jd
+
 	try:
-		log=pd.io.parsers.read_fwf(request)
+		log=pd.io.parsers.read_fwf(request, widths=[15, 7, 17, 8, 8, 9, 11, 11, 13, 23, 11])
+		#exclude any rows that have JD's either 2 days before the JD of the start date or 2 days after the start date
+		#bad jd's are sometimes printed. a 2 day buffer should be OK.
+		log=log[(log.JD > startJD -2) & (log.JD < startJD +2)]
 		log.Project=log.Project.replace(np.nan, 'ALL')
 		return log
 	except urllib2.HTTPError, e:
@@ -77,17 +83,18 @@ def tallyascii(datestart):
 	#figure out how many days there are in the month being processed
 	monthLength=calendar.monthrange(2000+int(datestart[0:2]),int(datestart[2:4]))[1]
 	for i in np.arange(int(datestart),int(datestart)+monthLength):
+		#print i
 		table=logapi(str(i))
 		if table.empty is not True:
 			index=0
 			j=index+1
 			while j < len(table)-1:
-				projectnow=table['Project'][index]
-				timenow=table['JD'][index]
-				targetnow=table['Object'][index]
-				while table['Project'][j] == projectnow and j < len(table)-1 and table['Object'][j] == targetnow:
+				projectnow=table['Project'].iloc[index]
+				timenow=table['JD'].iloc[index]
+				targetnow=table['Object'].iloc[index]
+				while table['Project'].iloc[j] == projectnow and j < len(table)-1 and table['Object'].iloc[j] == targetnow:
 					j=j+1
-				elapsed=(table['JD'][j-1]-timenow)*86400 + table['ExpTime'][j-1]
+				elapsed=(table['JD'].iloc[j-1]-timenow)*86400 + table['ExpTime'].iloc[j-1]
 				try:
 					projdict[projectnow]["nexp"]+=1
 					projdict[projectnow]["time"]+=elapsed
