@@ -62,11 +62,9 @@ night_report2.createHTML(150301, 1.5)
 ```
 will create 1.5-m-150301report.html
 
-Suggested Improvements
+Suggested Improvements/Known Problems
 ====================
-this program looks at all the 1.3m observation logs it can find for whatever month it is reducing so it can tally up the ammount of time used by program. andicam has problems where it doesnt write out header info for targets sometimes. this will cause the entire program to crash. 
-
-you could probably clean this all up by usings panda data frames instead of astropy tables. but that will take a lot of rewritting
+andicam has problems where it doesnt write out header info for targets sometimes, or writes incorrect information. This is particularly a problem for the JD column in the andicam logs. occasionally the JD of an observation will be written as 000.00, or will be an order of magnitude too small. The tallyascii function looks at the JD's of observations to determine for how long the telescope pointed at a target. Bad JD values can lead to nonsensicle negative observation times for projects. See YALE-08A-0001 for 1.3-m-150601report.html under the Science Observation Break Down section for an example, it has -53075000 hours of observing. 
 
 if you are super cool, it would be neat if the program could give warnings about immenent failurs given past night report data. ie if the dewar is being refilled constantly, it may mean it needs its vacuum restored
 
