@@ -8,6 +8,7 @@ from astropy.time import Time
 import pandas as pd
 import numpy as np
 import nr_charts
+import nr_charts_plotly
 
 #fetch the response sheet formated as tsv from google
 #return the sheet as an astropy ascii table
@@ -128,10 +129,10 @@ def createHTML(datestart,tele):
 	hours={"observing":hrobs, "weather":hrswthr, "engineering":hreng, "sys_failure":hrsys, "ToO":hrsToO}
 
 	#make charts
-	nr_charts.dispositionchart(disposition,datestart,tele)
-	nr_charts.weatherchart(weather,datestart,tele)
-	nr_charts.failurechart(sysfail,datestart,tele)
-	nr_charts.timepie(hours,datestart,tele)
+	disposition_iframe=nr_charts_plotly.dispositionchart(disposition,datestart,tele)
+	weather_iframe=nr_charts_plotly.weatherchart(weather,datestart,tele)
+	systemfail_iframe=nr_charts_plotly.failurechart(sysfail,datestart,tele)
+	hours_iframe=nr_charts_plotly.timepie(hours,datestart,tele)
 
 	#make the html page
 	fileHTML=open(str(tele)+'-m-'+datestart+'report.html','w')
@@ -149,17 +150,17 @@ def createHTML(datestart,tele):
 		fileHTML.write('<p><em>Nights With No Observing : '+str(noObs)+'</em></p>')
 		fileHTML.write('<fieldset><h3>Observing Conditions</h3>')
 		cond=countUniq(tableMonth,'Program used')
-		nr_charts.condpie(cond,datestart)
-		fileHTML.write('<img src="images/'+datestart+'conditions.png" align="left" width="500px">')
+		conditions_iframe=nr_charts_plotly.condpie(cond,datestart)
+		fileHTML.write(conditions_iframe)
 		parseHTMLtable(cond,fileHTML,['Program Used','Total'])
 		fileHTML.write('</fieldset>')
 
 		fileHTML.write('<fieldset><h3>Science Observation Break Down</h3>')
 		projtime={}
 		for key in projdict:
-			projtime[key]=np.around(projdict[key]['time']/3600, decimals=1)
-		nr_charts.breakdownpie(projdict,datestart)
-		fileHTML.write('<img src="images/'+datestart+'breakdown.png" align="left" width="500px">')
+			projtime[key]=np.around(projdict[key]['time']/3600.0, decimals=1)
+		breakdown_iframe=nr_charts_plotly.breakdownpie(projdict,datestart)
+		fileHTML.write(breakdown_iframe)
 		parseHTMLtable(projtime,fileHTML,['Project ID','Hours'])
 		fileHTML.write('</fieldset>')
 
@@ -171,10 +172,10 @@ def createHTML(datestart,tele):
 		times=np.array([datetime.datetime.strptime(i, "%m/%d/%Y %H:%M:%S") 
 			for i in tableMonth['Timestamp'].__array__()])
 
-		nr_charts.seeingtime(times,[tableMonth['Seeing (BON)'],tableMonth['Seeing (Middle of Night)'],tableMonth['Seeing (EON)']],
+		seeing_iframe=nr_charts_plotly.seeingtime(times,[tableMonth['Seeing (BON)'],tableMonth['Seeing (Middle of Night)'],tableMonth['Seeing (EON)']],
 			[bonclean,monclean,eonclean],datestart,tele)
 
-		fileHTML.write('<img src="images/'+str(tele)+'-m-'+datestart+'seeing.png" align="left" width="500px">')
+		fileHTML.write(seeing_iframe)
 		parseHTMLtable(bonseestat,fileHTML,['BON Statistic','Seeing Value'])
 		fileHTML.write('<br><br>')
 		parseHTMLtable(monseestat,fileHTML,['MON Statistic','Seeing Value'])
@@ -193,10 +194,10 @@ def createHTML(datestart,tele):
 		times=np.array([datetime.datetime.strptime(i, "%m/%d/%Y %H:%M:%S") 
 			for i in tableMonth['Timestamp'].__array__()])
 
-		nr_charts.seeingtime(times,[tableMonth['Maximum Seeing'],tableMonth['Minimum Seeing']],
+		seeing_iframe=nr_charts_plotly.seeingtime(times,[tableMonth['Maximum Seeing'],tableMonth['Minimum Seeing']],
 			[maxsclean,minsclean],datestart,tele)
 
-		fileHTML.write('<img src="images/'+str(tele)+'-m-'+datestart+'seeing.png" align="left" width="500px">')
+		fileHTML.write(seeing_iframe)
 
 		parseHTMLtable(maxseestat,fileHTML,['BON Statistic','Seeing Value'])
 		fileHTML.write('<br><br>')
@@ -205,23 +206,23 @@ def createHTML(datestart,tele):
 		fileHTML.write('</fieldset>')
 
 	fileHTML.write('<fieldset><h3>Time Loss & Observing</h3>')
-	fileHTML.write('<img src="images/'+str(tele)+'-m-'+datestart+'hours.png" align="left" width="500px">')
+	fileHTML.write(hours_iframe)
 	parseHTMLtable(hours,fileHTML,['task','hours'])
 	fileHTML.write('</fieldset>')
 
 	fileHTML.write('<fieldset>')
 	fileHTML.write('<h3>Weather Conditions</h3>')
-	fileHTML.write('<img src="images/'+str(tele)+'-m-'+datestart+'weather.png" align="left" width="500px">')
+	fileHTML.write(weather_iframe)
 	parseHTMLtable(weather,fileHTML,['conditions','freq.'])
 	fileHTML.write('</fieldset>')
 	
 	fileHTML.write('<fieldset><h3>System Failures</h3>')
-	fileHTML.write('<img src="images/'+str(tele)+'-m-'+datestart+'systemfail.png" align="left" width="500px">')
+	fileHTML.write(systemfail_iframe)
 	parseHTMLtable(sysfail,fileHTML,['failure','freq.'])
 	fileHTML.write('</fieldset>')
 	
 	fileHTML.write('<fieldset><h3>Night Disposition</h3>')
-	fileHTML.write('<img src="images/'+str(tele)+'-m-'+datestart+'disposition.png" align="left" width="500px">')
+	fileHTML.write(disposition_iframe)
 	parseHTMLtable(disposition,fileHTML,['Disposition','freq.'])
 	fileHTML.write('</fieldset>')
 
