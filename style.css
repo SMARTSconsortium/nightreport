@@ -47,6 +47,10 @@ p {
 	border-radius: 10px;
 }
 
-#container img{
+#container img {
 	float: right;
+}
+
+iframe {
+	float: left;
 }
